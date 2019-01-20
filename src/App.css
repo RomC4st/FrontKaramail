@@ -1,0 +1,87 @@
+.App {
+  text-align: center;
+}
+a {
+  color: white;
+  text-decoration: none;
+}
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 10vmin;
+}
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #633974;
+  margin-bottom: 3%;
+}
+
+.App-header {
+  background-color: #633974;
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #fff;
+  margin-bottom: 5%;
+  opacity: 0.5;
+}
+image {
+  width: 90%;
+  height: auto;
+}
+
+ul {
+  list-style: none;
+}
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url("ShadowsIntoLight.ttf") format("woff2");
+}
+
+form {
+  width: 50%;
+  margin: 5% auto 5% auto;
+  padding: 5% 10% 5% 10%;
+  background-color: #a28ce9;
+  color: #fff;
+  letter-spacing: 0.2rem;
+  font-size: 18px;
+  box-shadow: 10px 5px 5px #a9a9a9;
+  opacity: 0.8;
+  border-radius: 60px;
+}
+.BtnSend {
+  margin: 10%;
+  padding: 3%;
+  border-radius: 40px;
+  background-color: #633974;
+  opacity: 0.5;
+  letter-spacing: 0.2rem;
+  font-size: 18px;
+  color: #fff;
+  box-shadow: none;
+}
+
+h1 {
+  letter-spacing: 0.3rem;
+}
+
+.Owl {
+  margin-bottom: 10%;
+  font-family: "Shadows Into Light", cursive;
+}
