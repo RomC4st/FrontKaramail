@@ -1,8 +1,15 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
+import Grid from '@material-ui/core/Grid'
 import TouchRipple from "@material-ui/core/ButtonBase/TouchRipple";
 import Input from "@material-ui/core/Input";
-import axios from 'axios'
+import axios from 'axios';
+import Profil from './Profil'
+
+
+
+
+
 
 TouchRipple.prototype.render = () => null;
 
@@ -16,13 +23,15 @@ class Message extends Component {
       items: [],
       id: null,
       prevItems: [],
+      profil: false,
+      token: undefined
     };
   }
 
 
   onChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: `${this.props.login} : ${e.target.value}`
     });
   };
 
@@ -41,8 +50,14 @@ class Message extends Component {
   };
 
   router = () => {
-    window.location.assign("http://localhost:3000/signin");
+    localStorage.removeItem("token");
+    window.location.assign("http://localhost:3000/signup");
   };
+  handleClick = e => {
+    this.setState({
+      profil: true
+    })
+  }
 
   componentDidUpdate() {
 
@@ -51,7 +66,8 @@ class Message extends Component {
         .then(res => {
           this.setState({
             prevItems: res.data,
-            items: res.data
+            items: res.data,
+            token: localStorage.getItem("token")
           })
 
         })
@@ -62,7 +78,7 @@ class Message extends Component {
 
     const url2 = 'http://localhost:3001/UserId';
     const config = {
-      login: this.props.login
+      login: this.props.login,
     }
     const url1 = "http://localhost:3001/messages";
     axios(url1)
@@ -83,43 +99,65 @@ class Message extends Component {
         }
       )
     axios.post(url2, config)
-      .then(res => {
+      .then(res => { 
+        if (this.props.login !==undefined){
         this.setState({
           id: res.data.id
         });
-      }
+      }}
       )
+      .catch(
+        err => alert(err))
 
   }
 
 
   render() {
-    const { items, error, isLoaded } = this.state;
+    console.log(this.props.login)
+    const { items, error, isLoaded, profil } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
-    } else {
-      require("./Api.css");
+    } else if (profil) {
+      return <Profil id={this.state.id} login={this.props.login} />
+    } else if (this.state.token === null) {
+      return <h1 style={{
+        textAlign: 'center'
+      }}>Access Denied</h1>
+    }
+    else if (this.state.token !== null) {
+
+      require("./Api.css")
       return (
         <div className="InputMessage">
-          <Button
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "50px",
-              width: "64px",
-              height: "64px"
-            }}
-            className="logout"
-            onClick={this.router}
-          >
-            <img
-              src="http://icons.iconarchive.com/icons/mazenl77/I-like-buttons/64/EZ-Shutdown-icon.png"
-              alt="disconnect"
-            />
-          </Button>
-          <h2> Welcome {this.props.login} </h2>
+          <div>
+            <Grid sm={12}>
+              <Button
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "50px",
+                  width: "64px",
+                  height: "64px",
+                  marginLeft: '10px',
+
+                }}
+                className="logout"
+                onClick={this.router}
+              >
+                <img
+                  src="http://icons.iconarchive.com/icons/mazenl77/I-like-buttons/64/EZ-Shutdown-icon.png"
+                  alt="disconnect"
+                />
+              </Button>
+            </Grid>
+            <Grid sm={12}>
+              <Button style={{ marginLeft: '5px', marginTop: '2%' }} onClick={this.handleClick} > Profil </Button>
+            </Grid>
+          </div>
+          <h2 > Welcome {this.props.login} </h2>
           <img
+            style={{ margin: 'auto' }}
             src="https://media.giphy.com/media/eoxomXXVL2S0E/giphy.gif"
             alt="gif"
           />
@@ -147,6 +185,7 @@ class Message extends Component {
                 style={{ width: "50%" }}
               />
             </div>
+
             <div className="form-data">
               <input className="BtnSend" type="submit" value="Send" />
             </div>

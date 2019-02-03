@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import Input from "@material-ui/core/Input";
+import Button from "@material-ui/core/Button"
+import { Redirect } from 'react-router-dom'
+import arrow from "./images/left-arrow.png"
 
 class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
       login: "",
-      pass: ""
+      pass: "",
+      Back: false
     };
   }
 
@@ -16,8 +20,13 @@ class SignIn extends Component {
     });
   };
 
+  handleClick = e => {
+    this.setState({
+      Back: true
+    })
+  }
+
   submitForm = (e, state) => {
-    alert("thank you");
     e.preventDefault();
 
     const config = {
@@ -31,15 +40,33 @@ class SignIn extends Component {
 
     let Url = "http://localhost:3001/users";
 
-    fetch(Url, config).then(
-      alert(`Bienvenue sur la base de donnée ${this.state.login} !`)
+    fetch(Url, config).then(res => {
+      if (res.status === 200) {
+        return alert(`Welcome to Database ${this.state.login} !`)
+      } else if (res.status === 409) {
+        return alert(`User ${this.state.login} already exists`)
+      }
+
+
+    }
+
     );
   };
 
   render() {
+    if (this.state.Back) {
+      return <Redirect to='/' />
+    }
     return (
       <div>
+        <Button name='Back' color='primary' value='Back'
+          style={{ marginLeft: '2%',color:'#000' }} onClick={this.handleClick}>
+          <img className="arrow" src={arrow} alt="back arrow" /> Back
+        </Button>
         <form onSubmit={this.submitForm}>
+          <div style={{ marginBottom: '1%' }}>
+
+          </div>
           <img
             className="Owl"
             src="http://icons.iconarchive.com/icons/thesquid.ink/free-flat-sample/96/owl-icon.png"

@@ -1,6 +1,6 @@
-.App {
+/* .App {
   text-align: center;
-}
+} */
 a {
   color: white;
   text-decoration: none;
@@ -34,6 +34,7 @@ image {
 }
 
 ul {
+  text-align: center;
   list-style: none;
 }
 .App-link {
@@ -54,6 +55,7 @@ ul {
 }
 
 form {
+  text-align: center;
   width: 50%;
   margin: 5% auto 5% auto;
   padding: 5% 10% 5% 10%;
@@ -66,7 +68,7 @@ form {
   border-radius: 60px;
 }
 .BtnSend {
-  margin: 10%;
+  margin:5%;
   padding: 3%;
   border-radius: 40px;
   background-color: #633974;
@@ -76,12 +78,38 @@ form {
   color: #fff;
   box-shadow: none;
 }
-
+img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto
+}
 h1 {
   letter-spacing: 0.3rem;
+}
+
+.arrow{
+  max-width: 1.3vw;
+  padding-right: 15px;
 }
 
 .Owl {
   margin-bottom: 10%;
   font-family: "Shadows Into Light", cursive;
 }
+
+.BtnSend {
+  transform: scale(0.8);
+}
+Button.Continue{
+  display: block;
+  margin: auto;
+  
+}
+Button.navBar{
+  display:  inline-block ;
+  margin:auto
+}
+.Profil .MessageProfil{
+  text-align: center
+}
+

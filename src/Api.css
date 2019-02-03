@@ -1,5 +1,5 @@
 button.Continue {
-  visibility: hidden;
+  display: none;
 }
 
 form {

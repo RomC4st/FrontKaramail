@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Message from "./Message";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink, Redirect } from "react-router-dom";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
+import arrow from "./images/left-arrow.png"
 
 class SignUp extends Component {
   constructor(props) {
@@ -11,7 +12,9 @@ class SignUp extends Component {
     this.state = {
       login: "",
       pass: "",
-      connection: false
+      connection: false,
+      back: false,
+      token: null
     };
   }
 
@@ -20,6 +23,12 @@ class SignUp extends Component {
       [e.target.name]: e.target.value
     });
   };
+
+  handleClick = e => {
+    this.setState({
+      Back: true
+    })
+  }
 
   handelSubmit = e => {
     e.preventDefault();
@@ -40,8 +49,10 @@ class SignUp extends Component {
       .then(NotConnected => {
         if (!NotConnected) {
           return (
-            this.setState({ submit: true, connection: true }),
-            console.log(this.state.connection)
+            this.setState({
+              submit: true, connection: true,
+            }),
+            console.table(this.state)
             /*alert(`Vous ètes connécté ${this.state.login}`)*/
           );
         }
@@ -49,6 +60,7 @@ class SignUp extends Component {
   };
 
   protectedRoute() {
+
     const token = localStorage.getItem("token");
     axios({
       method: "POST",
@@ -56,44 +68,54 @@ class SignUp extends Component {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    }).then(res => console.log(res));
+    })
   }
   render() {
-    const { connection } = this.state;
 
+    const { connection, Back } = this.state;
+    if (Back) {
+      return <Redirect to='/' />
+    }
     if (connection) {
-      require("./Message.css");
+
 
       return (
-        <div>
+
+        < div >
+
           <Router>
             <div>
+
               <Button
                 className="Continue"
-                style={{ marginRight: "3%", padding: "1%" }}
                 variant="contained"
                 color="primary"
                 onClick={this.protectedRoute}
               >
-                <NavLink className="signup" to="/message">
+                <NavLink className="signup" to="/dashboard">
                   Continue
                 </NavLink>
               </Button>
               <Route
-                path="/message"
+                path="/dashboard"
                 render={props => (
                   <Message login={this.state.login} pass={this.state.pass} />
                 )}
               />
             </div>
           </Router>
-        </div>
+
+        </div >
       );
     }
     return (
       <div>
+        <Button name='Back' color='primary' value='Back'
+          style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+          <img className="arrow" src={arrow} alt="back arrow" /> Back
+        </Button>
         <form onSubmit={this.handelSubmit}>
-          {" "}
+
           <img
             className="Owl"
             src="http://icons.iconarchive.com/icons/thesquid.ink/free-flat-sample/96/owl-icon.png"

@@ -1,48 +1,35 @@
 import React, { Component } from "react";
-
 import "./App.css";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Switch, Route } from "react-router-dom";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import Button from "@material-ui/core/Button";
+import Message from './Message';
+import NavBar from './NavBar'
+
 
 class App extends Component {
+
+
+
   render() {
+
     return (
       <div className="App">
         <header className="App-header">
           <h1>@ Karamail </h1>
         </header>
 
-        <Router>
+        <Switch>
           <div>
-            <div className="navbar">
-              <Button
-                style={{ marginRight: "3%", padding: "1%" }}
-                variant="contained"
-                color="primary"
-              >
-                <NavLink className="signin" to="/signin">
-                  Sign In
-                </NavLink>
-                <div className="space" />
-              </Button>
-              <Button
-                style={{ marginLeft: "3%", padding: "1%" }}
-                variant="contained"
-                color="secondary"
-              >
-                <NavLink className="signup" to="/signup">
-                  Sign Up
-                </NavLink>
-              </Button>
-            </div>
-
-            <Route exact path="/" />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/signin" component={SignIn} />
+            <Route exact path='/dashboard' component={Message} />
+            <Route exact path="/" component={NavBar} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/signin" component={SignIn} />
           </div>
-        </Router>
+        </Switch>
+
+
+
       </div>
     );
   }
