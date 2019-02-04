@@ -50,9 +50,10 @@ class Message extends Component {
   };
 
   router = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("KaraToken");
     window.location.assign("http://localhost:3000/signup");
   };
+
   handleClick = e => {
     this.setState({
       profil: true
@@ -67,7 +68,7 @@ class Message extends Component {
           this.setState({
             prevItems: res.data,
             items: res.data,
-            token: localStorage.getItem("token")
+            token: localStorage.getItem("KaraToken")
           })
 
         })
@@ -76,7 +77,7 @@ class Message extends Component {
 
   componentDidMount() {
 
-    const url2 = 'http://localhost:3001/UserId';
+    const url2 = 'http://localhost:3001/users/UserId';
     const config = {
       login: this.props.login,
     }
@@ -99,12 +100,13 @@ class Message extends Component {
         }
       )
     axios.post(url2, config)
-      .then(res => { 
-        if (this.props.login !==undefined){
-        this.setState({
-          id: res.data.id
-        });
-      }}
+      .then(res => {
+        if (this.props.login !== undefined) {
+          this.setState({
+            id: res.data.id
+          });
+        }
+      }
       )
       .catch(
         err => alert(err))
@@ -113,7 +115,7 @@ class Message extends Component {
 
 
   render() {
-    console.log(this.props.login)
+
     const { items, error, isLoaded, profil } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;

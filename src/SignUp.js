@@ -10,8 +10,8 @@ class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      login: "",
-      pass: "",
+      login: null,
+      pass: null,
       connection: false,
       back: false,
       token: null
@@ -44,7 +44,7 @@ class SignUp extends Component {
       .post(Url, config)
 
       .then(res => {
-        localStorage.setItem("token", res.headers["x-access-token"])
+        localStorage.setItem("KaraToken", res.headers["x-access-token"])
       })
       .then(NotConnected => {
         if (!NotConnected) {
@@ -61,7 +61,7 @@ class SignUp extends Component {
 
   protectedRoute() {
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("KaraToken");
     axios({
       method: "POST",
       url: "http://localhost:3001/auth/protected",
