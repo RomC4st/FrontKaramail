@@ -31,7 +31,7 @@ class Message extends Component {
 
   onChange = e => {
     this.setState({
-      [e.target.name]: `${this.props.login} : ${e.target.value}`
+      [e.target.name]: `${this.props.login}: ${e.target.value}`
     });
   };
 

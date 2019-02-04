@@ -56,7 +56,7 @@ class Profile extends Component {
           <ul style={{ textAlign: 'center' }}>
             {this.state.data.map((e, i) => (
               <li key={i}>
-                <p > {e.message}</p>
+                <p > {e.message.split(`${this.props.login}:`)}</p>
               </li>
             ))}
           </ul>
