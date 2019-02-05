@@ -5,6 +5,7 @@ a {
   color: white;
   text-decoration: none;
 }
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 10vmin;
@@ -113,4 +114,13 @@ Button.navBar{
 .Profil .MessageProfil{
   text-align: center
 }
+
+ .Pagination  {
+   margin-top: 2%
+  /* display: inline-block;
+  margin:auto;
+  margin-right: 1.5% */
+} 
+
+
 

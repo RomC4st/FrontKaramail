@@ -11,7 +11,8 @@ class Profile extends Component {
     Back: false,
     token: undefined,
     data: [],
-    isLoading: false
+    isLoading: false,
+    page: null
   }
 
   BackToMessage = () => {
@@ -20,18 +21,35 @@ class Profile extends Component {
       Back: true
     });
   }
+
+  next = () => {
+    if (this.state.page >= this.state.data.length / 10)
+      return this.state.page
+    else
+      return this.setState({ page: this.state.page + 1 });
+  };
+
+  prev = () => {
+    if (this.state.page === 1 || this.state.page === null)
+      return this.state.page;
+    else
+      return this.setState({ page: this.state.page - 1 });
+  };
+
   componentDidMount = () => {
     let url = `http://localhost:3001/messages/${this.props.id}`
     axios(url)
       .then(res => this.setState({
         token: localStorage.getItem("KaraToken"),
         data: res.data,
-        isLoading: true
+        isLoading: true,
+        page: 1
       }))
 
 
   }
   render() {
+
     if (this.state.Loaded === false) {
       return <h1>is Loading...</h1>
     }
@@ -52,13 +70,28 @@ class Profile extends Component {
         </Button>
 
         <div className='MessageProfil'>
-          <h1>Message saved : {this.props.id}</h1>
+          <h1>{this.state.data.length} Messages from {this.props.login} saved </h1>
           <ul style={{ textAlign: 'center' }}>
-            {this.state.data.map((e, i) => (
-              <li key={i}>
-                <p > {e.message.split(`${this.props.login}:`)}</p>
+            {this.state.data
+              .slice((this.state.page - 1) * 10, this.state.page * 10)
+              .map((e, i) => (
+                <li key={i}>
+                  <p > {e.message.split(`${this.props.login}:`)}</p>
+                </li>
+              ))}
+            <div className='Pagination'>
+              <li>
+                <Button className="Prev" onClick={this.prev}>prev</Button>
               </li>
-            ))}
+              <li>
+                <p className="CountPage">{this.state.page}</p>
+              </li>
+              <li>
+                <Button className="Next" onClick={this.next}>
+                  next
+                </Button>
+              </li>
+            </div>
           </ul>
         </div>
       </div>

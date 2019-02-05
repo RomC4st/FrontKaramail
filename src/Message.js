@@ -24,7 +24,8 @@ class Message extends Component {
       id: null,
       prevItems: [],
       profil: false,
-      token: undefined
+      token: undefined,
+      page: null
     };
   }
 
@@ -49,6 +50,20 @@ class Message extends Component {
     })
   };
 
+  next = () => {
+    if (this.state.page >= this.state.items.length / 10)
+      return this.state.page
+    else
+      return this.setState({ page: this.state.page + 1 });
+  };
+
+  prev = () => {
+    if (this.state.page === 1)
+      return this.state.page;
+    else
+      return this.setState({ page: this.state.page - 1 });
+  };
+
   router = () => {
     localStorage.removeItem("KaraToken");
     window.location.assign("http://localhost:3000/signup");
@@ -65,6 +80,7 @@ class Message extends Component {
     if (this.state.prevItems !== this.state.items) {
       axios('http://localhost:3001/messages')
         .then(res => {
+          res.data.reverse()
           this.setState({
             prevItems: res.data,
             items: res.data,
@@ -89,6 +105,7 @@ class Message extends Component {
           this.setState({
             isLoaded: true,
             items: result.data,
+            page: 1
           },
           );
         },
@@ -165,11 +182,26 @@ class Message extends Component {
           />
           <div className="Messages">
             <ul>
-              {items.map((x, i) => (
-                <li key={i}>
-                  <p> {x.message}</p>
+              {items
+                .slice((this.state.page - 1) * 10, this.state.page * 10)
+                .map((x, i) => (
+                  <li key={i}>
+                    <p> {x.message}</p>
+                  </li>
+                ))}
+              <div className='Pagination'>
+                <li>
+                  <Button className="Prev" onClick={this.prev}>prev</Button>
                 </li>
-              ))}
+                <li>
+                  <p className="CountPage">{this.state.page}</p>
+                </li>
+                <li>
+                  <Button className="Next" onClick={this.next}>
+                    next
+                    </Button>
+                </li>
+              </div>
             </ul>
           </div>
           <form onSubmit={this.submitForm}>
