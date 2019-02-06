@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import arrow from './images/left-arrow.png';
 import Edit from './images/edit_black_27x27.png'
 import Delete from './images/delete_black_27x27.png'
-
+import Input from '@material-ui/core/Input'
 class Profile extends Component {
 
   state = {
@@ -27,23 +27,22 @@ class Profile extends Component {
   }
 
   handleClick = (e) => {
-    console.log('CRS 1', this.state.prevData)
     e.preventDefault();
     this.setState({
       action: e.currentTarget.value,
-      idMessage: e.currentTarget.getAttribute('name'),
-
+      idMessage: e.currentTarget.getAttribute('name')
     }, () => {
-      if (this.state.action === 'delete')
+      if (this.state.action === 'delete') {
         axios.delete(`http://localhost:3001/messages/${this.state.idMessage}`)
-      axios(`http://localhost:3001/messages/${this.state.id}`)
-        .then(res => {
-          this.setState({
-            prevData: res.data
+        axios(`http://localhost:3001/messages/${this.state.id}`)
+          .then(res => {
+            this.setState({
+              prevData: res.data
+            })
           })
-        })
+      }
     })
-    console.log('CRS 2', this.state.prevData)
+
   }
 
   next = () => {
@@ -76,7 +75,13 @@ class Profile extends Component {
       }))
   }
 
-
+  onChange = e => {
+    this.setState({
+      [e.target.getAttribute('name')]: [e.target.value],
+    }, () => {
+      console.table(this.state)
+    })
+  }
   componentDidUpdate = () => {
 
     if (this.state.prevData !== this.state.data) {
@@ -85,9 +90,7 @@ class Profile extends Component {
   }
 
   render() {
-    console.log('DATA', this.state.data,
-      'PREVDATA', this.state.prevData)
-
+    console.table(this.state)
     if (this.state.data === [])
       return <h1>No messages to show</h1>
     if (this.state.Loaded === false) {
@@ -115,17 +118,19 @@ class Profile extends Component {
             {this.state.data
               .slice((this.state.page - 1) * 10, this.state.page * 10)
               .map((e, i) => (
-                <li key={i}>
-                  <p > {e.message.split(`${this.state.login}:`)}
-                    <Button color='primary' name={e.id} value='edit'
-                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
-                      <img src={Edit} alt="update" />
-                    </Button>
-                    <Button color='primary' name={e.id} value='delete'
-                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
-                      <img src={Delete} alt="delete" />
-                    </Button>
-                  </p>
+
+                <li key={i} style={{ display: 'flex', justifyContent: 'center' }}>
+                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) ? <Input name={e.id} value={this.state[e.id] ? this.state[e.id] : e.message} onChange={this.onChange} /> : <p> {e.message.split(`${this.state.login}:`)}</p>}
+
+                  <Button color='primary' name={e.id} value='edit'
+                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                    <img src={Edit} alt="update" />
+                  </Button>
+                  <Button color='primary' name={e.id} value='delete'
+                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                    <img src={Delete} alt="delete" />
+                  </Button>
+
                 </li>
               ))}
             <div className='Pagination'>
