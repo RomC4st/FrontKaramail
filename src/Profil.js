@@ -3,9 +3,13 @@ import axios from 'axios';
 import Message from './Message';
 import Button from '@material-ui/core/Button';
 import arrow from './images/left-arrow.png';
-import Edit from './images/edit_black_27x27.png'
-import Delete from './images/delete_black_27x27.png'
-import Input from '@material-ui/core/Input'
+import Edit from './images/edit_black_27x27.png';
+import Delete from './images/delete_black_27x27.png';
+import Input from '@material-ui/core/Input';
+import Confirm from './images/done_black_27x27.png';
+import Cancel from './images/cancel_black_27x27.png'
+
+
 class Profile extends Component {
 
   state = {
@@ -120,16 +124,33 @@ class Profile extends Component {
               .map((e, i) => (
 
                 <li key={i} style={{ display: 'flex', justifyContent: 'center' }}>
-                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) ? <Input name={e.id} value={this.state[e.id] ? this.state[e.id] : e.message} onChange={this.onChange} /> : <p> {e.message.split(`${this.state.login}:`)}</p>}
 
-                  <Button color='primary' name={e.id} value='edit'
-                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
-                    <img src={Edit} alt="update" />
+                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) 
+                  ? <Input name={e.id} value={this.state[e.id] ? this.state[e.id] : e.message} onChange={this.onChange} /> 
+                  : <p> {e.message.split(`${this.state.login}:`)}</p>}
+
+                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) 
+                  ? <Button color='primary' name={e.id} value='confirm'
+                  style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                  <img src={Confirm} alt="confirm" />
                   </Button>
-                  <Button color='primary' name={e.id} value='delete'
+
+                  : <Button color='primary' name={e.id} value='edit'
+                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                    <img src={Edit} alt="edit" />
+                  </Button>}
+
+                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) 
+
+                  ? <Button color='primary' name={e.id} value='cancel'
+                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                    <img src={Cancel} alt="cancel" />
+                  </Button>
+
+                  :<Button color='primary' name={e.id} value='delete'
                     style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
                     <img src={Delete} alt="delete" />
-                  </Button>
+                  </Button>}
 
                 </li>
               ))}
