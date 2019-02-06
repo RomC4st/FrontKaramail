@@ -3,7 +3,8 @@ import axios from 'axios';
 import Message from './Message';
 import Button from '@material-ui/core/Button';
 import arrow from './images/left-arrow.png';
-
+import Edit from './images/edit_black_27x27.png'
+import Delete from './images/delete_black_27x27.png'
 
 class Profile extends Component {
 
@@ -12,14 +13,37 @@ class Profile extends Component {
     token: undefined,
     data: [],
     isLoading: false,
-    page: null
+    page: null,
+    idMessage: null,
+    prevData: [],
+    id: this.props.id,
+    login: this.props.login
   }
 
   BackToMessage = () => {
-
     this.setState({
       Back: true
     });
+  }
+
+  handleClick = (e) => {
+    console.log('CRS 1', this.state.prevData)
+      e.preventDefault();
+    this.setState({
+      action: e.currentTarget.value,
+      idMessage: e.currentTarget.getAttribute('name'),
+      prevData: []
+    }, () => {
+      if (this.state.action === 'delete')
+        axios.delete(`http://localhost:3001/messages/${this.state.idMessage}`)
+        axios(`http://localhost:3001/messages/${this.state.id}`)
+        .then(res => {
+          this.setState({
+            prevData: res.data
+          })
+        })
+    })
+    console.log('CRS 2', this.state.prevData)
   }
 
   next = () => {
@@ -37,24 +61,41 @@ class Profile extends Component {
   };
 
   componentDidMount = () => {
-    let url = `http://localhost:3001/messages/${this.props.id}`
+
+    this.getData()
+  }
+
+  getData = () => {
+
+    let url = `http://localhost:3001/messages/${this.state.id}`
     axios(url)
       .then(res => this.setState({
         token: localStorage.getItem("KaraToken"),
         data: res.data,
+        prevData: res.data,
         isLoading: true,
-        page: 1
+        page: 1,
       }))
-
-
   }
-  render() {
 
+
+  componentDidUpdate = () => {
+
+    if (this.state.prevData !== this.state.data) {
+
+      this.getData()
+    }
+  }
+
+  render() {
+    console.log(this.state.data)
+    if (this.state.data === [])
+      return <h1>No messages to show</h1>
     if (this.state.Loaded === false) {
       return <h1>is Loading...</h1>
     }
     if (this.state.Back) {
-      return <Message login={this.props.login} />
+      return <Message login={this.state.login} />
     }
     if (this.state.token === null) {
       return <h1 style={{
@@ -70,13 +111,22 @@ class Profile extends Component {
         </Button>
 
         <div className='MessageProfil'>
-          <h1>{this.state.data.length} Messages from {this.props.login} saved </h1>
+          <h1>{this.state.data.length} Messages from {this.state.login} saved </h1>
           <ul style={{ textAlign: 'center' }}>
             {this.state.data
               .slice((this.state.page - 1) * 10, this.state.page * 10)
               .map((e, i) => (
                 <li key={i}>
-                  <p > {e.message.split(`${this.props.login}:`)}</p>
+                  <p > {e.message.split(`${this.state.login}:`)}
+                    <Button color='primary' name={e.id} value='edit'
+                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                      <img src={Edit} alt="update" />
+                    </Button>
+                    <Button color='primary' name={e.id} value='delete'
+                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                      <img src={Delete} alt="delete" />
+                    </Button>
+                  </p>
                 </li>
               ))}
             <div className='Pagination'>

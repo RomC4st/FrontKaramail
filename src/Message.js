@@ -45,7 +45,7 @@ class Message extends Component {
       userId: this.state.id
     };
 
-    axios.post(Url, config).then(() => {
+    axios.post(Url, config).then(res => {
       this.setState({ prevItems: [] })
     })
   };
