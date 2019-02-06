@@ -28,15 +28,15 @@ class Profile extends Component {
 
   handleClick = (e) => {
     console.log('CRS 1', this.state.prevData)
-      e.preventDefault();
+    e.preventDefault();
     this.setState({
       action: e.currentTarget.value,
       idMessage: e.currentTarget.getAttribute('name'),
-      prevData: []
+
     }, () => {
       if (this.state.action === 'delete')
         axios.delete(`http://localhost:3001/messages/${this.state.idMessage}`)
-        axios(`http://localhost:3001/messages/${this.state.id}`)
+      axios(`http://localhost:3001/messages/${this.state.id}`)
         .then(res => {
           this.setState({
             prevData: res.data
@@ -61,12 +61,10 @@ class Profile extends Component {
   };
 
   componentDidMount = () => {
-
     this.getData()
   }
 
   getData = () => {
-
     let url = `http://localhost:3001/messages/${this.state.id}`
     axios(url)
       .then(res => this.setState({
@@ -82,13 +80,14 @@ class Profile extends Component {
   componentDidUpdate = () => {
 
     if (this.state.prevData !== this.state.data) {
-
       this.getData()
     }
   }
 
   render() {
-    console.log(this.state.data)
+    console.log('DATA', this.state.data,
+      'PREVDATA', this.state.prevData)
+
     if (this.state.data === [])
       return <h1>No messages to show</h1>
     if (this.state.Loaded === false) {
