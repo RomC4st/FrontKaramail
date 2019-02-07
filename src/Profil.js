@@ -44,6 +44,14 @@ class Profile extends Component {
               prevData: res.data
             })
           })
+      } else if (this.state.action === 'confirm') {
+        const config = { message: this.state[this.state.idMessage].toString() }
+        console.log(config)
+        const url = `http://localhost:3001/messages/${this.state.idMessage}`
+        axios.put(url, config)
+          .then(res => this.setState({
+            prevData: res.data
+          }))
       }
     })
 
@@ -80,21 +88,22 @@ class Profile extends Component {
   }
 
   onChange = e => {
+    // e.target.value.split(`${this.state.login}: `).slice(1).toString()
     this.setState({
-      [e.target.getAttribute('name')]: [e.target.value],
+      [e.target.getAttribute('name')]:[e.target.value] ,
     }, () => {
       console.table(this.state)
     })
   }
-  componentDidUpdate = () => {
 
+  componentDidUpdate = () => {
     if (this.state.prevData !== this.state.data) {
       this.getData()
     }
   }
 
   render() {
-    console.table(this.state)
+
     if (this.state.data === [])
       return <h1>No messages to show</h1>
     if (this.state.Loaded === false) {
@@ -108,6 +117,7 @@ class Profile extends Component {
         textAlign: 'center'
       }}>Access Denied</h1>
     }
+
     return (
 
       <div className='Profil'>
@@ -125,32 +135,32 @@ class Profile extends Component {
 
                 <li key={i} style={{ display: 'flex', justifyContent: 'center' }}>
 
-                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) 
-                  ? <Input name={e.id} value={this.state[e.id] ? this.state[e.id] : e.message} onChange={this.onChange} /> 
-                  : <p> {e.message.split(`${this.state.login}:`)}</p>}
+                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`)
+                    ? <Input name={e.id} value={this.state[e.id] ? this.state[e.id] : e.message} onChange={this.onChange} />
+                    : <p> {e.message.split(`${this.state.login}:`)}</p>}
 
-                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) 
-                  ? <Button color='primary' name={e.id} value='confirm'
-                  style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
-                  <img src={Confirm} alt="confirm" />
-                  </Button>
+                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`)
+                    ? <Button color='primary' name={e.id} value='confirm'
+                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                      <img src={Confirm} alt="confirm" />
+                    </Button>
 
-                  : <Button color='primary' name={e.id} value='edit'
-                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
-                    <img src={Edit} alt="edit" />
-                  </Button>}
+                    : <Button color='primary' name={e.id} value='edit'
+                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                      <img src={Edit} alt="edit" />
+                    </Button>}
 
-                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`) 
+                  {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`)
 
-                  ? <Button color='primary' name={e.id} value='cancel'
-                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
-                    <img src={Cancel} alt="cancel" />
-                  </Button>
+                    ? <Button color='primary' name={e.id} value='cancel'
+                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                      <img src={Cancel} alt="cancel" />
+                    </Button>
 
-                  :<Button color='primary' name={e.id} value='delete'
-                    style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
-                    <img src={Delete} alt="delete" />
-                  </Button>}
+                    : <Button color='primary' name={e.id} value='delete'
+                      style={{ marginLeft: '2%', color: '#000' }} onClick={this.handleClick}>
+                      <img src={Delete} alt="delete" />
+                    </Button>}
 
                 </li>
               ))}
