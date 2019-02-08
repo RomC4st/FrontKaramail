@@ -45,13 +45,23 @@ class Profile extends Component {
             })
           })
       } else if (this.state.action === 'confirm') {
-        const config = { message: `${this.state.login}: `+ this.state[this.state.idMessage].toString() }
+        const config = { message: `${this.state.login}: ` + this.state[this.state.idMessage].toString() }
         console.log(config)
         const url = `http://localhost:3001/messages/${this.state.idMessage}`
         axios.put(url, config)
           .then(res => this.setState({
             prevData: res.data
           }))
+      } else if (this.state.action === 'cancel') {
+        
+        this.state.data.map(el => {
+
+          if (el.id == this.state.idMessage) {
+            this.setState({
+              [el.id]: el.message
+            })
+          }
+        })
       }
     })
 
@@ -90,7 +100,7 @@ class Profile extends Component {
   onChange = e => {
 
     this.setState({
-      [e.target.getAttribute('name')]: e.target.value.split(`${this.state.login}: `).filter( e => e.length > 0)
+      [e.target.getAttribute('name')]: e.target.value.split(`${this.state.login}: `).filter(e => e.length > 0)
     }, () => {
       console.table(this.state)
     })
