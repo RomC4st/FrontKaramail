@@ -45,7 +45,7 @@ class Profile extends Component {
             })
           })
       } else if (this.state.action === 'confirm') {
-        const config = { message: this.state[this.state.idMessage].toString() }
+        const config = { message: `${this.state.login}: `+ this.state[this.state.idMessage].toString() }
         console.log(config)
         const url = `http://localhost:3001/messages/${this.state.idMessage}`
         axios.put(url, config)
@@ -88,9 +88,9 @@ class Profile extends Component {
   }
 
   onChange = e => {
-    // e.target.value.split(`${this.state.login}: `).slice(1).toString()
+
     this.setState({
-      [e.target.getAttribute('name')]:[e.target.value] ,
+      [e.target.getAttribute('name')]: e.target.value.split(`${this.state.login}: `).filter( e => e.length > 0)
     }, () => {
       console.table(this.state)
     })
