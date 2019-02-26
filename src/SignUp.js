@@ -10,8 +10,8 @@ class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      login: null,
-      pass: null,
+      login: '',
+      pass: '',
       connection: false,
       back: false,
       token: null
@@ -143,7 +143,7 @@ class SignUp extends Component {
               id="pass"
               name="pass"
               onChange={this.onChange}
-              value={this.state.poster}
+              value={this.state.pass}
               required
               minLength="4"
             />

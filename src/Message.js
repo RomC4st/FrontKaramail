@@ -151,7 +151,7 @@ class Message extends Component {
       return (
         <div className="InputMessage">
           <div>
-            <Grid sm={12}>
+            <Grid sm={12} item>
               <Button
                 style={{
                   backgroundColor: "#fff",
@@ -170,7 +170,7 @@ class Message extends Component {
                 />
               </Button>
             </Grid>
-            <Grid sm={12}>
+            <Grid sm={12} item>
               <Button style={{ marginLeft: '5px', marginTop: '2%' }} onClick={this.handleClick} > Profil </Button>
             </Grid>
           </div>

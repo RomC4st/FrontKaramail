@@ -8,8 +8,8 @@ class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      login: null,
-      pass: null,
+      login: '',
+      pass: '',
       Back: false
     };
   }

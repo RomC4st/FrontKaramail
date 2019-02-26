@@ -21,7 +21,9 @@ class Profile extends Component {
     idMessage: null,
     prevData: [],
     id: this.props.id,
-    login: this.props.login
+    login: this.props.login,
+    prevAction: null,
+    action: null
   }
 
   BackToMessage = () => {
@@ -30,41 +32,63 @@ class Profile extends Component {
     });
   }
 
-  handleClick = (e) => {
+  handleClick = async (e) => {
+
     e.preventDefault();
-    this.setState({
-      action: e.currentTarget.value,
-      idMessage: e.currentTarget.getAttribute('name')
-    }, () => {
-      if (this.state.action === 'delete') {
-        axios.delete(`http://localhost:3001/messages/${this.state.idMessage}`)
-        axios(`http://localhost:3001/messages/${this.state.id}`)
-          .then(res => {
-            this.setState({
-              prevData: res.data
-            })
-          })
-      } else if (this.state.action === 'confirm') {
-        const config = { message: `${this.state.login}: ` + this.state[this.state.idMessage].toString() }
-        console.log(config)
-        const url = `http://localhost:3001/messages/${this.state.idMessage}`
-        axios.put(url, config)
-          .then(res => this.setState({
-            prevData: res.data
-          }))
-      } else if (this.state.action === 'cancel') {
-        
-        this.state.data.map(el => {
+    this.setState(prevState => ({
+      prevAction: prevState.action
+    }))
+    const ACTION = await
 
-          if (el.id == this.state.idMessage) {
-            this.setState({
-              [el.id]: el.message
+      this.setState({
+        action: e.currentTarget.value,
+        idMessage: e.currentTarget.getAttribute('name'),
+
+      }, () => {
+        if (this.state.action === 'delete') {
+          axios.delete(`http://localhost:3001/messages/${this.state.idMessage}`)
+          axios(`http://localhost:3001/messages/${this.state.id}`)
+            .then(res => {
+              this.setState({
+                prevData: res.data
+              })
             })
+        } else if (this.state.action === 'confirm') {
+
+          if (this.state[this.state.idMessage]) {
+            const config = { message: `${this.state.login}: ` + this.state[this.state.idMessage].toString() }
+            const url = `http://localhost:3001/messages/${this.state.idMessage}`
+            axios.put(url, config)
+              .then(res => this.setState({
+                prevData: res.data
+              }))
+          } else {
+            return alert(`You didn't change anything !`)
           }
-        })
-      }
-    })
+        } else if (this.state.action === 'cancel') {
 
+          this.state.data.map(el => {
+            if (el.id === this.state.idMessage) {
+              this.setState({
+                [el.id]: el.message
+              })
+            }
+            return 1
+          })
+        }
+       else if (this.state.prevAction === 'edit' && this.state.action === 'edit') {
+          
+          this.state.data.map(el => {
+            if(this.state[el.id]) {
+               this.setState({
+                 [el.id]: el.message.split(`${this.state.login}: `).slice(1)
+                  })    
+            }
+            return 1
+           })
+         }
+       })
+     return ACTION
   }
 
   next = () => {
@@ -98,7 +122,7 @@ class Profile extends Component {
   }
 
   onChange = e => {
-
+    
     this.setState({
       [e.target.getAttribute('name')]: e.target.value.split(`${this.state.login}: `).filter(e => e.length > 0)
     }, () => {
@@ -113,7 +137,7 @@ class Profile extends Component {
   }
 
   render() {
-
+    console.table(this.state)
     if (this.state.data === [])
       return <h1>No messages to show</h1>
     if (this.state.Loaded === false) {
@@ -146,8 +170,9 @@ class Profile extends Component {
                 <li key={i} style={{ display: 'flex', justifyContent: 'center' }}>
 
                   {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`)
-                    ? <Input name={e.id} value={this.state[e.id] ? this.state[e.id] : e.message} onChange={this.onChange} />
+                    ? <Input name={e.id.toString()} value={this.state[e.id] ? this.state[e.id] : e.message} onChange={this.onChange} />
                     : <p> {e.message.split(`${this.state.login}:`)}</p>}
+
 
                   {(this.state.action === 'edit') && (this.state.idMessage === `${e.id}`)
                     ? <Button color='primary' name={e.id} value='confirm'
