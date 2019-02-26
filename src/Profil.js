@@ -68,27 +68,27 @@ class Profile extends Component {
         } else if (this.state.action === 'cancel') {
 
           this.state.data.map(el => {
-            if (el.id === this.state.idMessage) {
+            if (el.id === Number(this.state.idMessage)) {
               this.setState({
-                [el.id]: el.message
+                [el.id]: el.message.split(`${this.state.login}: `).slice(1)
               })
             }
             return 1
           })
         }
-       else if (this.state.prevAction === 'edit' && this.state.action === 'edit') {
-          
+        else if (this.state.prevAction === 'edit' && this.state.action === 'edit') {
+
           this.state.data.map(el => {
-            if(this.state[el.id]) {
-               this.setState({
-                 [el.id]: el.message.split(`${this.state.login}: `).slice(1)
-                  })    
+            if (this.state[el.id]) {
+              this.setState({
+                [el.id]: el.message.split(`${this.state.login}: `).slice(1)
+              })
             }
             return 1
-           })
-         }
-       })
-     return ACTION
+          })
+        }
+      })
+    return ACTION
   }
 
   next = () => {
@@ -122,7 +122,7 @@ class Profile extends Component {
   }
 
   onChange = e => {
-    
+
     this.setState({
       [e.target.getAttribute('name')]: e.target.value.split(`${this.state.login}: `).filter(e => e.length > 0)
     }, () => {
